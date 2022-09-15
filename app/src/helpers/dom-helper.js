@@ -1,60 +1,59 @@
 export default class DOMHelper {
-  static parseStrToDOM(str) {
-    const parser = new DOMParser();
-    return parser.parseFromString(str, "text/html");
-  }
 
-  static wrapTextNodes(dom) {
-    const body = dom.body;
-    let textNodes = [];
-
-    function recursy(element) {
-      element.childNodes.forEach((node) => {
-        if (
-          node.nodeName === "#text" &&
-          node.nodeValue.replace(/\s+/g, "").length > 0
-        ) {
-          textNodes.push(node);
-        } else {
-          recursy(node);
-        }
-      });
+    static parseStrToDOM(str) {
+        const parser = new DOMParser();
+        return parser.parseFromString(str, "text/html");
     }
 
-    recursy(body);
+    static wrapTextNodes(dom) {
+        const body = dom.body;
+        let textNodes = [];
 
-    textNodes.forEach((node, i) => {
-      const wrapper = dom.createElement("text-editor");
-      node.parentNode.replaceChild(wrapper, node);
-      wrapper.appendChild(node);
-      wrapper.setAttribute("nodeid", i);
-    });
+        function recursy(element) {
+            element.childNodes.forEach(node => {
+                
+                if(node.nodeName === "#text" && node.nodeValue.replace(/\s+/g, "").length > 0) {
+                    textNodes.push(node);
+                } else {
+                    recursy(node);
+                }
+            })
+        };
 
-    return dom;
-  }
+        recursy(body);
 
-  static serializeDOMToString(dom) {
-    const serializer = new XMLSerializer();
-    return serializer.serializeToString(dom);
-  }
+        textNodes.forEach((node, i) => {
+            const wrapper = dom.createElement('text-editor');
+            node.parentNode.replaceChild(wrapper, node);
+            wrapper.appendChild(node);
+            wrapper.setAttribute("nodeid", i);
+        });
 
-  static unwrapTextNodes(dom) {
-    dom.body.querySelectorAll("text-editor").forEach((element) => {
-      element.parentNode.replaceChild(element.firstChild, element);
-    });
-  }
+        return dom;
+    }
 
-  static wrapImages(dom) {
-    dom.body.querySelectorAll("img").forEach((img, i) => {
-      img.setAttribute("editableimgid", i);
-    });
+    static serializeDOMToString(dom) {
+        const serializer = new XMLSerializer();
+        return serializer.serializeToString(dom);
+    }
 
-    return dom;
-  }
+    static unwrapTextNodes(dom) {
+        dom.body.querySelectorAll("text-editor").forEach(element => {
+            element.parentNode.replaceChild(element.firstChild, element);
+        });
+    }
 
-  static unwrapImages(dom) {
-    dom.body.querySelectorAll("[editableimgid]").forEach((img) => {
-      img.removeAttribute("editableimgid");
-    });
-  }
+    static wrapImages(dom) {
+        dom.body.querySelectorAll('img').forEach((img, i) => {
+            img.setAttribute('editableimgid', i);
+        });
+
+        return dom;
+    }
+
+    static unwrapImages(dom) {
+        dom.body.querySelectorAll('[editableimgid]').forEach(img => {
+            img.removeAttribute('editableimgid');
+        });        
+    }
 }
