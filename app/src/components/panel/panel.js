@@ -14,6 +14,11 @@ const Panel = () => {
         Опубликовать
       </button>
       <button
+        className="uk-button uk-button-primary"
+        uk-toggle="target: #modal-meta">
+        Редактировать МЕТА
+      </button>
+      <button
         className="uk-button uk-button-default"
         uk-toggle="target: #modal-backup">
         Восстановить
